@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use \App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use Illuminate\Http\Request;
+use App\Models\comments;
+use Auth;
 
 class BlogPostController extends Controller
 {
@@ -13,7 +15,8 @@ class BlogPostController extends Controller
     public function take()
     {
 
-       $posts = BlogPost::all(); //fetch all blog posts from DB
+       $posts = BlogPost::all();
+	   //fetch all blog posts from DB
 			return $posts; //returns the fetched posts //
 				//return view('blog.blog', ['posts' => $posts]);
     }
@@ -33,13 +36,14 @@ class BlogPostController extends Controller
     public function store(Request $request)
     {
         $newPost = BlogPost::create([
-            'title' => $request->title,
+            'username' => Auth::user()->username,
+			'title' => $request->title,
             'body' => $request->body,
             'user_id' => 1
 			
         ]);
 
-        return view('blog.blog'); //
+        return view('home'); //
     }
 
     /**
@@ -51,6 +55,9 @@ class BlogPostController extends Controller
         'post' => $blogPost,
     ]); //returns the fetched posts
     }
+	
+         //returns the fetched posts
+    
 
     /**
      * Show the form for editing the specified resource.
@@ -83,6 +90,6 @@ class BlogPostController extends Controller
     {
        $blogPost->delete();
 
-        return view ('welcome'); //
+        return view ('home'); //
     }
 }
